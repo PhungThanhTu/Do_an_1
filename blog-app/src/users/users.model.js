@@ -18,10 +18,15 @@ exports.createUser = async user => {
         // create document instance
         let newUser = new User(
             user);
-
-        newUser.save(function (err, user) {
-            if (err) console.error("cannot create user, error occured" + err);
-            console.log(user + " saved to user collection.");
-        });
-   
+        try {
+            await newUser.save(function (err, user) {
+                if (err) {console.error("cannot create user, error occured" + err)}
+                console.log(user + " saved to user collection.");
+            });
+            return true;
+        }
+        catch {
+            return false;
+        }
+       
 }
