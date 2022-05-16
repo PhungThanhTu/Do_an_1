@@ -3,11 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-var global = require('./services/global')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login')
+
+dotenv.config();
+
+// require api
+const authRouter = require('./src/auth/auth.routes');
+const userRouter = require('./src/users/users.routes');
+const {con_string}= require('./config/mongo');
+
+mongoose.connect(con_string);
 
 var app = express();
 
@@ -21,9 +28,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/login',loginRouter);
+// api 
+app.use('/auth',authRouter);
+app.use('/user',userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
