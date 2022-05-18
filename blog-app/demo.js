@@ -4,4 +4,4 @@ const {con_string} = require('./config/mongo');
 
 mongoose.connect(con_string);
 
-demoObject.getUser('ptdtu').then(data=>console.log(data));
+demoObject.updateToken("pttu2001","hasagiii");

@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 var userSchema = mongoose.Schema({
     username:{type:String,index:true},
     password:String,
-    fullname:String
+    fullname:String,
+    refreshtoken:String,
 })
 // convert schema to model
 var User = mongoose.model('User',userSchema,'users');
@@ -29,4 +30,21 @@ exports.createUser = async user => {
             return false;
         }
        
+}
+
+exports.updateToken = async (username,refreshToken) => {
+    const filter = {"username":username};
+    const update = {"refreshtoken":refreshToken};
+    try {
+        let doc = await User.findOneAndUpdate(filter,update);
+        console.log(`refresh token create ${doc}`);
+        return true;
+    }
+    catch {
+        console.log("update failed");
+        return false;
+    }
+
+
+    
 }
