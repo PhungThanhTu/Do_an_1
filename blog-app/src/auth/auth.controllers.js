@@ -39,7 +39,7 @@ exports.register = async(req,res) => {
                 message:"Error occured during account creation, please try again"
             });  
         }
-        return res.send({
+        return res.status(201).send({
             user:newUser
         });
     };
