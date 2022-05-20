@@ -20,4 +20,16 @@ exports.generateToken =  async (payload,secretSignature,tokenLife) => {
         console.log(`erro generating token from ${payload} with errorr ${err}`);
         return null;
     }
-}
+};
+
+exports.decodeToken = async (token,secretKey) => {
+    try {
+        console.log(token);
+        return await verify(token,secretKey,{
+            ignoreExpiration:true,
+        });
+    } catch(err){
+        console.log(`Error decoding token ${err}`);
+        return null;
+    }
+};

@@ -88,3 +88,63 @@ exports.login = async(req,res)=> {
 
 
 }
+
+exports.refresh = async (req,res) => {
+    // get access token form headers
+    const accessTokenFromHeader  = req.headers.authorization;
+
+    // respond error if cannot get the accesstoken
+    if(!accessTokenFromHeader) return res.status(400).send({message:"Access token invalid"});
+    console.log(accessTokenFromHeader);
+    // get refresh token from body
+    const refreshTokenFromBody = req.body.refreshToken;
+
+    if(!refreshTokenFromBody ) return res.status(400).send({message:"Refresh token invalid"});
+
+    const secretToken = process.env.ACCESS_TOKEN_SECRET;
+    const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
+
+    // decode token
+    const decoded = await methods.decodeToken(
+        accessTokenFromHeader,
+        secretToken
+    );
+
+    if(!decoded) return res.status(400).send({
+        message:"Invalid tokens"
+    })
+    // debugging
+    console.log(decoded);
+
+    const username = decoded.payload.username;
+
+    const user = await userModel.getUser(username);
+
+    if(!user) return res.status(401).send({
+        message:"Username unavailable"
+    });
+
+    // check if refreshtoken is valid
+    if(user.refreshtoken !== refreshTokenFromBody) return res.status(400).send({
+        message:"Refresh token invalid"
+    });
+
+    // create token data
+    const dataForAccessToken = {
+        username,
+    };
+    // generate token
+    const accessToken = await methods.generateToken(
+        dataForAccessToken,
+        secretToken,
+        accessTokenLife,
+    );
+
+    if(!accessToken) return res.status(400).send({
+        message:"Access token creation failure, please try again"
+    })
+
+    return res.send({accessToken});
+
+    
+}
