@@ -42,9 +42,10 @@ router.post('/', isAuth, async (req,res) => {
             message:"Successfully Posted"
         })
     }
-    catch {
+    catch(err) {
+        console.log(err);
         res.status(400).send({
-            message:"Error, cannot post"
+            message:"Error, cannot post",
         })
     }
 })

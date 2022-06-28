@@ -43,7 +43,9 @@ exports.getPostById = async id => {
 exports.createPost = async (post,username,categories) => {
   post.username = username;
   post.categories = categories;
-  const newPost = Post(newPost);
+  console.log(post);
+  const newPost =   await Post(post);
+  console.log(newPost);
   return await newPost.save();
 },
 // update post
