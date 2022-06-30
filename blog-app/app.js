@@ -13,6 +13,7 @@ dotenv.config();
 const authRouter = require('./src/auth/auth.routes');
 const userRouter = require('./src/users/users.routes');
 const categoryRouter = require('./src/categories/categories.routes')
+const postRouter = require('./src/posts/posts.routes')
 const {con_string}= require('./config/mongo');
 
 mongoose.connect(con_string);
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth',authRouter);
 app.use('/user',userRouter);
 app.use('/category',categoryRouter);
+app.use('/post',postRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
